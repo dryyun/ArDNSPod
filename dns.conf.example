@@ -1,3 +1,6 @@
+# 可配置获取 ip 的 curl 命令的地址
+curlip="ip.sb" # members.3322.org/dyndns/getip
+
 # For security reasons, it is recommended that you use token-based auth instead
 # arMail="test@gmail.com"
 # arPass="123"

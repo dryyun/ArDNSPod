@@ -1,3 +1,8 @@
+# Fork 前言
+
+作者很久没更新了，issue 不解决，PR 不合并。
+获取公网 ip 的方式有点问题，直接通过第三方获取比较方便 ，`curl -s ip.sb `
+
 # ArDNSPod
 
 基于DNSPod用户API实现的纯Shell动态域名客户端，适配网卡地址。
@@ -18,7 +23,7 @@
 # 按`TokenID,Token`格式填写
 arToken="12345,7676f344eaeaea9074c123451234512d"
 
-# 每行一个域名
+# 每行一个域名 "根域名" "二级域名"
 arDdnsCheck "test.org" "subdomain"
 ```
 

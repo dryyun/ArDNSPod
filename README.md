@@ -2,11 +2,16 @@
 
 选用 shell 脚本的原因就是运行无依赖。  
 作者很久没更新了，issue 不解决，PR 不合并。  
-获取公网 ip 的方式有点问题，直接通过第三方获取比较方便 ，`curl -s ip.sb `
+具体修改如下 
+> 1、修改获取 ip 的方式，直接通过第三方获取 ，`curl -s ip.sb `  
+> 2、使用 ip.txt 缓存之前的 ip 地址，如果 ip 没有改动就不需要请求 dnspod 的接口  
+> 3、优化部分代码  
+
+
 
 # ArDNSPod
 
-基于DNSPod用户API实现的纯Shell动态域名客户端，适配网卡地址。
+基于 DNSPod 用户 API 实现的纯 Shell 动态域名客户端，适配网卡地址。
 
 # Usage
 

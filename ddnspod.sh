@@ -8,41 +8,18 @@
 #################################################
 
 # OS Detection
-case $(uname) in
-  'Linux')
-    echo "Linux"
+os=$(uname)
+if [ "$os" = "Linux" ] || [ "$os" = "Darwin" ] 
+then
+    echo $os
     arIpAddress() {
-        local extip
-        extip=$(curl -s $curlip)
-        echo $extip
+        echo '1.3.4.7'
+        # echo $(curl -s $curlip)
     }
-    ;;
-  'FreeBSD')
-    echo 'FreeBSD'
+else
+    echo "Only can be used on Linux or Darwin"
     exit 100
-    ;;
-  'WindowsNT')
-    echo "Windows"
-    exit 100
-    ;;
-  'Darwin')
-    echo "Mac"
-    arIpAddress() {
-        local extip
-        extip=$(curl -s $curlip)
-        echo $extip
-    }
-    ;;
-  'SunOS')
-    echo 'Solaris'
-    exit 100
-    ;;
-  'AIX')
-    echo 'AIX'
-    exit 100
-    ;;
-  *) ;;
-esac
+fi
 
 # Get script dir
 # See: http://stackoverflow.com/a/29835459/4449544
@@ -94,7 +71,11 @@ rreadlink() ( # Execute the function in a *subshell* to localize variables and t
 
 DIR=$(dirname -- "$(rreadlink "$0")")
 
+
+
 # Global Variables:
+
+ipcache=$DIR/"ip.txt"
 
 # Token-based Authentication
 arToken=""
@@ -110,6 +91,13 @@ curlip=""
 # Get Domain IP
 # arg: domain
 arDdnsInfo() {
+    if [ -f "$ipcache" ]
+    then
+      local cacheIp=`cat ip.txt`
+      echo $cacheIp;
+      return 0
+    fi
+
     local domainID recordID recordIP
     # Get domain ID
     domainID=$(arApiPost "Domain.Info" "domain=${1}")
@@ -124,16 +112,15 @@ arDdnsInfo() {
     recordIP=$(echo $recordIP | sed 's/.*,"value":"\([0-9\.]*\)".*/\1/')
 
     # Output IP
-    case "$recordIP" in 
-      [1-9][0-9]*)
-        echo $recordIP
-        return 0
-        ;;
-      *)
-        echo "Get Record Info Failed!"
-        return 1
-        ;;
-    esac
+    
+    if [[ $recordIP =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; 
+    then
+      echo $recordIP
+      return 0
+    else 
+      echo "Get Record Info Failed!"
+      return 1
+    fi
 }
 
 # Get data
@@ -170,6 +157,7 @@ arDdnsUpdate() {
     # Output IP
     if [ "$recordIP" = "$myIP" ]; then
         if [ "$recordCD" = "1" ]; then
+            echo $recordIP > $ipcache
             echo $recordIP
             return 0
         fi

@@ -13,8 +13,7 @@ if [ "$os" = "Linux" ] || [ "$os" = "Darwin" ]
 then
     echo $os
     arIpAddress() {
-        echo '1.3.4.7'
-        # echo $(curl -s $curlip)
+        echo $(curl -s $curlip)
     }
 else
     echo "Only can be used on Linux or Darwin"
@@ -93,7 +92,7 @@ curlip=""
 arDdnsInfo() {
     if [ -f "$ipcache" ]
     then
-      local cacheIp=`cat ip.txt`
+      local cacheIp=`cat $ipcache`
       echo $cacheIp;
       return 0
     fi
